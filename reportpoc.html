@@ -35,8 +35,8 @@
       ) {
 
 
-          esriConfig.defaults.io.proxyUrl = "";
-
+          //esriConfig.defaults.io.proxyUrl = "";
+          esriConfig.defaults.io.alwaysUseProxy = false;
           var requestHandle = esriRequest({
             "url": "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/0",
             "content": {
