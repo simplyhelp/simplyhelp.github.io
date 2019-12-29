@@ -5,8 +5,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
   <title>Request Test</title>
-  <link rel="stylesheet" href="http://js.arcgis.com/4.2/esri/css/main.css">
-  <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/4.2/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
+  <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/4.2/dijit/themes/claro/claro.css">
   <style>
     html,
     body,
@@ -31,7 +31,7 @@
       parseOnLoad: true
     };
   </script>
-  <script src="http://js.arcgis.com/4.2/"></script>
+  <script src="https://js.arcgis.com/4.2/"></script>
   <script>
     var map;
     require([
@@ -55,7 +55,7 @@
         zoom: 4,
         center: [15, 65]
       });
-      var url = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/NapervilleShelters/FeatureServer/0/query?where=1%3D1&returnGeometry=false&&outfields=*&f=pjson";
+      var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/NapervilleShelters/FeatureServer/0/query?where=1%3D1&returnGeometry=false&&outfields=*&f=pjson";
       esriRequest(url,{
           responseType:'json',
           callbackParamName:'callback',
