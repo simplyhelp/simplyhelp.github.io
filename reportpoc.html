@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JSON Content</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
+  <style>
+     table, th, td {
+           border: 1px solid #ccc;
+           border-collapse: collapse;
+      }
+      th, td{
+        padding:0.5em;
+      }
+  </style>
+
+  <script src="https://js.arcgis.com/3.20/"></script>
+  <script>
+    require([
+        "dojo/dom",
+        "dojo/on",
+        "dojo/dom-class",
+        "dojo/_base/json",
+        "esri/config",
+        "esri/request",
+        "dojo/domReady!"
+      ],
+      function(
+        dom,
+        on,
+        domClass,
+        dojoJson,
+        esriConfig,
+        esriRequest
+      ) {
+
+
+          esriConfig.defaults.io.proxyUrl = "url to proxy";
+
+          var requestHandle = esriRequest({
+            "url": "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/0",
+            "content": {
+              "f": "json"
+            }
+          });
+          requestHandle.then(createTable, function(error){
+            console.log("Request Failed");
+          });
+    
+
+        function createTable(response, io){
+     
+        
+          var tbl = document.getElementById("tableDiv");
+          var tblBody = document.createElement("tbody");
+
+          var header = tbl.createTHead();
+          var headerRow = header.insertRow(0);
+          var headerCell = document.createElement("th");
+          headerCell.innerHTML = "Name";
+          headerRow.appendChild(headerCell);
+          var headerCell2 = document.createElement("th");
+          headerCell2.innerHTML = "Alias";
+          headerRow.appendChild(headerCell2);
+
+
+
+
+          response.fields.forEach(function(field){
+            var row = document.createElement("tr");
+            var cell = document.createElement("td");
+            var cell2 = document.createElement("td");
+            cell.innerHTML = field.name;
+            cell2.innerHTML = field.alias;
+            row.appendChild(cell);
+            row.appendChild(cell2);
+            tblBody.appendChild(row);
+          });
+          
+          tbl.appendChild(tblBody);
+  
+   
+
+        }
+       
+    });
+  </script>
+
+</head>
+<body>
+  <table id="tableDiv"></table>
+</body>
+</html>
