@@ -37,11 +37,7 @@
 
           //esriConfig.defaults.io.proxyUrl = "";
           esriConfig.defaults.io.alwaysUseProxy = false;
-
-          // Add a known server to the CORS list.
-          require(["esri/config"], function(esriConfig) {
-            esriConfig.request.corsEnabledServers.push("sampleserver6.arcgisonline.com");
-          });
+          esriConfig.request.corsEnabledServers.push("sampleserver6.arcgisonline.com");
       
           var requestHandle = esriRequest({
             "url": "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/0",
