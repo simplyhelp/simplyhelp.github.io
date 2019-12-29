@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+  <title>Request Test</title>
+  <link rel="stylesheet" href="http://js.arcgis.com/4.2/esri/css/main.css">
+  <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/4.2/dijit/themes/claro/claro.css">
+  <style>
+    html,
+    body,
+    #viewDiv {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #FFF;
+      overflow: hidden;
+      font-family: "Trebuchet MS";
+    }
+    #header {
+      height: 3%;
+      overflow: auto;
+    }
+  </style>
+  <script>
+    var dojoConfig = {
+      parseOnLoad: true
+    };
+  </script>
+  <script src="http://js.arcgis.com/4.2/"></script>
+  <script>
+    var map;
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "dojo/_base/lang",
+      "esri/request",
+      "dijit/layout/BorderContainer",
+      "dijit/layout/ContentPane",
+      "dojo/domReady!"
+    ], function(
+      Map, MapView, lang, esriRequest
+    ) {
+      map = new Map({
+        basemap: "topo"
+      });
+      
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        zoom: 4,
+        center: [15, 65]
+      });
+      var url = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/NapervilleShelters/FeatureServer/0/query?where=1%3D1&returnGeometry=false&&outfields=*&f=pjson";
+      esriRequest(url,{
+          responseType:'json',
+          callbackParamName:'callback',
+          timeout:15000
+        }).then(lang.hitch(this,function(resp){
+          console.info(resp.data);
+          alert("Data returned");
+        }),lang.hitch(this,function(error){
+          alert("Data failed");
+        }));
+    });
+  </script>
+</head>
+
+<body class="claro">
+  <div id="viewDiv" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'headline', gutters:false" style="padding:0px;margin:0px;">
+    <div id="map" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'left'" style="width:100%;height:100%;border:none;padding:0px;margin:0px;"></div>
+  </div>
+</body>
+
+</html>
