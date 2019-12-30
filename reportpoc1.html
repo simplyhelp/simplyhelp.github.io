@@ -55,7 +55,7 @@
         zoom: 4,
         center: [15, 65]
       });
-      var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/NapervilleShelters/FeatureServer/0/query?where=1%3D1&returnGeometry=false&&outfields=*&f=pjson";
+      var url = "https://services9.arcgis.com/kO1m83jGh0X2wqlg/arcgis/rest/services/FastFacility_Properties_Clients/FeatureServer/0/query?where=ID%3D57765&outFields=*&f=json&token=";
       esriRequest(url,{
           responseType:'json',
           callbackParamName:'callback',
@@ -70,10 +70,7 @@
   </script>
 </head>
 
-<body class="claro">
-  <div id="viewDiv" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'headline', gutters:false" style="padding:0px;margin:0px;">
-    <div id="map" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'left'" style="width:100%;height:100%;border:none;padding:0px;margin:0px;"></div>
-  </div>
+<body>
 </body>
 
 </html>
