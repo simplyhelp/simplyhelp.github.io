@@ -32,45 +32,41 @@
     };
   </script>
   <script src="https://js.arcgis.com/4.2/"></script>
+
+</head>
+
+<body>
+    <h1>Report</h1>
+    <p id="demo">Here</p>
+
   <script>
-    var map;
+
+    
     require([
-      "esri/Map",
-      "esri/views/MapView",
       "dojo/_base/lang",
       "esri/request",
-      "dijit/layout/BorderContainer",
-      "dijit/layout/ContentPane",
       "dojo/domReady!"
     ], function(
-      Map, MapView, lang, esriRequest
+      lang, esriRequest
     ) {
-      map = new Map({
-        basemap: "topo"
-      });
-      
-      var view = new MapView({
-        container: "viewDiv",
-        map: map,
-        zoom: 4,
-        center: [15, 65]
-      });
       var url = "https://services9.arcgis.com/kO1m83jGh0X2wqlg/arcgis/rest/services/FastFacility_Properties_Clients/FeatureServer/0/query?where=ID%3D57765&outFields=*&f=json&token=";
       esriRequest(url,{
           responseType:'json',
           callbackParamName:'callback',
           timeout:15000
         }).then(lang.hitch(this,function(resp){
-          console.info(resp.data);
+          //console.info(resp.data);
           alert("Data returned");
+          console.info(resp.data.features["0"].attributes);
+          for (x in resp.data.features["0"].attributes) {
+             document.getElementById("demo").innerHTML += resp.data.features["0"].attributes[x] + "<br>";
+          }
         }),lang.hitch(this,function(error){
           alert("Data failed");
         }));
+        
     });
   </script>
-</head>
-
-<body>
 </body>
 
 </html>
