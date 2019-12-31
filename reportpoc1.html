@@ -7,6 +7,7 @@
   <title>Request Test</title>
   <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
   <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/4.2/dijit/themes/claro/claro.css">
+  
   <style>
     html,
     body,
@@ -23,6 +24,27 @@
       height: 3%;
       overflow: auto;
     }
+    h1 {
+      text-align: center;
+    }
+
+    #tableDiv {
+      border-collapse:collapse;
+      width:auto;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
   </style>
   <script>
     var dojoConfig = {
@@ -30,14 +52,43 @@
     };
   </script>
   <script src="https://js.arcgis.com/4.2/"></script>
-
-</head>
-
-<body>
-    <h1>Report</h1>
-    <p id="demo"></p>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
   <script>
+//jQuery run everything after page load
+$(function(){
+
+function createTable(response){
+     
+        
+     var tbl = document.getElementById("tableDiv");
+     var tblBody = document.createElement("tbody");
+
+     var header = tbl.createTHead();
+     var headerRow = header.insertRow(0);
+     var headerCell = document.createElement("th");
+     headerCell.innerHTML = "Field";
+     headerRow.appendChild(headerCell);
+     var headerCell2 = document.createElement("th");
+     headerCell2.innerHTML = "Value";
+     headerRow.appendChild(headerCell2);
+
+     for (var key in response.data.features["0"].attributes) {
+       var row = document.createElement("tr");
+       var cell = document.createElement("td");
+       var cell2 = document.createElement("td");
+       cell.innerHTML = key;
+       cell2.innerHTML = response.data.features["0"].attributes[key];
+       row.appendChild(cell);
+       row.appendChild(cell2);
+       tblBody.appendChild(row);
+     };
+     
+     tbl.appendChild(tblBody);
+
+
+
+   }
     var urlParams = new URLSearchParams(window.location.search);
     
     require([
@@ -53,18 +104,21 @@
           callbackParamName:'callback',
           timeout:2000
         }).then(lang.hitch(this,function(resp){
-          //console.info(resp.data);
-//          alert("Data returned");
-          console.info(resp.data.features["0"].attributes);
-          for (var key in resp.data.features["0"].attributes) {
-            document.getElementById("demo").innerHTML += key + ":" + resp.data.features["0"].attributes[key] + "<br>";
-          }
+          createTable(resp);
+//debug:          console.info(resp.data.features["0"].attributes);
         }),lang.hitch(this,function(error){
           alert("Record not found");
         }));
         
     });
+});
   </script>
+
+</head>
+
+<body>
+    <h1>Details Sheet</h1>
+    <table id="tableDiv"></table>
 </body>
 
 </html>
