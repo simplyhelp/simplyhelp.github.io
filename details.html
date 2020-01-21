@@ -6,156 +6,61 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
   <title>Details</title>
-  <!--link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css"-->
-  <script>
-    var dojoConfig = {
-      parseOnLoad: true
-    };
-    "use strict";    
-  </script>
   <script src="https://js.arcgis.com/4.14/"></script>
-  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></!--script>-->
-  
-<style>
-  body {
-    font-family: "Trebuchet MS";
-  }
-  .fieldlabel {
-    color:grey;
-  }
-  .fieldvalue {
-    color:darkgreen;
-  }
-  .errormessage {
-    color:darkred;
-    font-weight: bolder;
-  }
-</style>
+  <script src="details.js"></script>
+  <link rel="stylesheet" href="details.css">
 <script>
-  
-var restServiceUrl = 'https://services9.arcgis.com/kO1m83jGh0X2wqlg/arcgis/rest/services/FastFacility_Properties_Clients/FeatureServer/0/';
-var outFields = '*';
-var urlParams = new URLSearchParams(window.location.search); // gets all URL parameters
-
-  function validURL(str) {
-    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-    return !!pattern.test(str);
-  }
-
-
-  function FastFacilityForm(response){  // Only executes after response from server
-     
-    console.log(response.data.features);
-    // this only processes the first returned record [0]
-    for (var key in response.data.features[0].attributes) {
-      if (urlParams.get('debug') == "true") {  // outputs all fields in error section
-        tableCode = "";
-          tableCode += "<div><span class='fieldlabel' id='"+key+"label'>"+key+"</span>&nbsp;:&nbsp;"; // label
-          //tableCode += "<span class='fieldvalue' id='"+key+"val'>:"+response.data.features[0].attributes[key]+"</span></div>"; // value
-          tableCode += "<span class='fieldlabel' id='"+key+"val'></span></div>"; // value
-          document.getElementById("error").innerHTML += tableCode;
-          console.log(tableCode);
-        };
-        
-        if (urlParams.get('nofill') == null) { // skips filling in values
-          var htmlTarget = document.getElementById(key+"val");
-          var fieldWorker = response.data.features[0].attributes[key];
-          if (htmlTarget) {
-            switch (key) {
-              case "WebAddress":
-                if (!/^https?:\/\//i.test(fieldWorker)) {
-                  fieldWorker = 'http://' + fieldWorker;
-                }
-                if (validURL(fieldWorker)) {
-                  htmlTarget.innerHTML = "<a href='"+fieldWorker+"' target='_blank'>"+fieldWorker+"</a>";
-                } else {
-                  htmlTarget.innerHTML = fieldWorker;
-                }
-                break;
-              case "InputDate":
-                htmlTarget.innerHTML = dojo.date.locale.format(new Date(fieldWorker), {datePattern: "MM/dd/yyyy"});  
-                break;
-              case "ObjectId": 
-                htmlTarget.innerHTML = "!!"+fieldWorker;
-                break;
-              case "LPicture":
-                htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
-                break;
-              case "logo":
-                htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
-                break;
-              case "ID":
-                htmlTarget.innerHTML = fieldWorker;
-                break;
-              case "Zip":
-                htmlTarget.innerHTML = fieldWorker;
-                break;
-              default:
-                if (isNaN(fieldWorker)) {
-                  htmlTarget.innerHTML = fieldWorker;
-                } else {
-                  htmlTarget.innerHTML = Number(fieldWorker).toLocaleString('en');
-                }
-            }
+  // function is called for each field (key) providing its retrieved value (fieldWorker)
+  function FillForm(key,fieldWorker) {
+    var htmlTarget = document.getElementById(key+"val");
+    if (htmlTarget) {
+      switch (key) {
+        case "WebAddress":
+          // Does this need http(s) prior?
+          if (!/^https?:\/\//i.test(fieldWorker)) {
+            fieldWorker = 'http://' + fieldWorker;
+          }
+          if (validURL(fieldWorker)) {
+            htmlTarget.innerHTML = "<a href='"+fieldWorker+"' target='_blank'>"+fieldWorker+"</a>";
+          } else {
+            htmlTarget.innerHTML = fieldWorker;
+          }
+          break;
+        case "InputDate":
+          htmlTarget.innerHTML = esriDate(fieldWorker);
+          break;
+        case "ObjectId": 
+          htmlTarget.innerHTML = "!!"+fieldWorker;
+          break;
+        case "LPicture":
+          htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
+          break;
+        case "Logo":
+          htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
+          break;
+        case "ID": // just display the ID
+          htmlTarget.innerHTML = fieldWorker;
+          break;
+        case "Zip": // just display a ZIP code
+          htmlTarget.innerHTML = fieldWorker;
+          break;
+        default:  // Adds commas to all number data, displays others
+          if (isNaN(fieldWorker)) {
+            htmlTarget.innerHTML = fieldWorker; 
+          } else {
+            htmlTarget.innerHTML = Number(fieldWorker).toLocaleString('en');
           }
         }
       }
   }
-   
-  
-   
-//jQuery run everything after page load (main)
-
-
-    var urlParams = new URLSearchParams(window.location.search);
-    
-    require([
-      "dojo/_base/lang",
-      "esri/request",
-      "dojo/date/locale",
-      "dojo/domReady!"
-    ], function(
-      lang, esriRequest
-    ) { 
-      var url = restServiceUrl + "query?where=ID%3D"+urlParams.get("id")+"&outFields="+outFields+"&returnHiddenFields=false&returnGeometry=false&orderByFields=objectid&f=json";
-      esriRequest(url,{
-          responseType:'json',
-          callbackParamName:'callback',
-          timeout:8000
-        }).then(lang.hitch(this,function(resp){
-          if (resp.data.features.length > 0) {
-            FastFacilityForm(resp);
-          } else {
-            document.getElementById("error").innerHTML = "Error: No record found matching id " + urlParams.get("id") + "."
-          }
-        }),lang.hitch(this,function(error){
-          console.log(error.details);
-          if (error.code==498) { // token error
-            document.getElementById("error").innerHTML = "Security Error: Service requires login and none provided";
-          } else {
-            document.getElementById("error").innerHTML = "Failed error ("+error.details.code+"):"+error.details.messages+".";
-          }
-        }));
-        
-    }); // end dojo require
-    
-    
-
-
   </script>
-
 </head>
-
 <body>
 
     <h1 id="Title">Details</h1>
     <div class="errormessage" id="error"></div>
-<!--Begin DIVs for field values-->
+<!--Begin SPANS for field values-->
+
 <div><span class="fieldlabel" id="LPicturelabel">LPicture</span>&nbsp;:&nbsp;<img src="" class="fieldvalue" id="LPictureval" width="300"></div>
 <div><span class="fieldlabel" id="IDlabel">ID</span>&nbsp;:&nbsp;<span class="fieldvalue" id="IDval"></span></div>
 <div><span class="fieldlabel" id="ClientIDlabel">ClientID</span>&nbsp;:&nbsp;<span class="fieldvalue" id="ClientIDval"></span></div>
@@ -216,7 +121,7 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
 <!--div><span class="fieldlabel" id="ObjectIdlabel">ObjectId</span>&nbsp;:&nbsp;<span class="fieldvalue" id="ObjectIdval"></span></div-->
 <div><span class="fieldlabel" id="Logolabel">Logo</span><img src="" class="fieldvalue" id="Logoval" width="150"></div>
 
-<!--End DIVs for field values-->
+<!--End SPANS for field values-->
 
     
 </body>

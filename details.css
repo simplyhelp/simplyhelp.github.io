@@ -1,0 +1,13 @@
+body {
+  font-family: "Trebuchet MS";
+}
+.fieldlabel {
+  color:grey;
+}
+.fieldvalue {
+  color:darkgreen;
+}
+.errormessage {
+  color:darkred;
+  font-weight: bolder;
+}
