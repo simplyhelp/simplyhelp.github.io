@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html>
+<!--requires parameter: ?id=57668-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+  <title>Details</title>
+  <!--link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css"-->
+  <script>
+    var dojoConfig = {
+      parseOnLoad: true
+    };
+    "use strict";    
+  </script>
+  <script src="https://js.arcgis.com/4.14/"></script>
+  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></!--script>-->
+  
+<style>
+  body {
+    font-family: "Trebuchet MS";
+  }
+  .fieldlabel {
+    color:grey;
+  }
+  .fieldvalue {
+    color:darkgreen;
+  }
+  .errormessage {
+    color:darkred;
+    font-weight: bolder;
+  }
+</style>
+<script>
+  
+var restServiceUrl = 'https://services9.arcgis.com/kO1m83jGh0X2wqlg/arcgis/rest/services/FastFacility_Properties_Clients/FeatureServer/0/';
+var outFields = '*';
+var urlParams = new URLSearchParams(window.location.search); // gets all URL parameters
+
+  function validURL(str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(str);
+  }
+
+
+  function FastFacilityForm(response){  // Only executes after response from server
+     
+    console.log(response.data.features);
+    // this only processes the first returned record [0]
+    for (var key in response.data.features[0].attributes) {
+      if (urlParams.get('debug') == "true") {  // outputs all fields in error section
+        tableCode = "";
+          tableCode += "<div><span class='fieldlabel' id='"+key+"label'>"+key+"</span>&nbsp;:&nbsp;"; // label
+          //tableCode += "<span class='fieldvalue' id='"+key+"val'>:"+response.data.features[0].attributes[key]+"</span></div>"; // value
+          tableCode += "<span class='fieldlabel' id='"+key+"val'></span></div>"; // value
+          document.getElementById("error").innerHTML += tableCode;
+          console.log(tableCode);
+        };
+        
+        if (urlParams.get('nofill') == null) { // skips filling in values
+          var htmlTarget = document.getElementById(key+"val");
+          var fieldWorker = response.data.features[0].attributes[key];
+          if (htmlTarget) {
+            switch (key) {
+              case "WebAddress":
+                if (!/^https?:\/\//i.test(fieldWorker)) {
+                  fieldWorker = 'http://' + fieldWorker;
+                }
+                if (validURL(fieldWorker)) {
+                  htmlTarget.innerHTML = "<a href='"+fieldWorker+"' target='_blank'>"+fieldWorker+"</a>";
+                } else {
+                  htmlTarget.innerHTML = fieldWorker;
+                }
+                break;
+              case "InputDate":
+                htmlTarget.innerHTML = dojo.date.locale.format(new Date(fieldWorker), {datePattern: "MM/dd/yyyy"});  
+                break;
+              case "ObjectId": 
+                htmlTarget.innerHTML = "!!"+fieldWorker;
+                break;
+              case "LPicture":
+                htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
+                break;
+              case "logo":
+                htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
+                break;
+              case "ID":
+                htmlTarget.innerHTML = fieldWorker;
+                break;
+              case "Zip":
+                htmlTarget.innerHTML = fieldWorker;
+                break;
+              default:
+                if (isNaN(fieldWorker)) {
+                  htmlTarget.innerHTML = fieldWorker;
+                } else {
+                  htmlTarget.innerHTML = Number(fieldWorker).toLocaleString('en');
+                }
+            }
+          }
+        }
+      }
+  }
+   
+  
+   
+//jQuery run everything after page load (main)
+
+
+    var urlParams = new URLSearchParams(window.location.search);
+    
+    require([
+      "dojo/_base/lang",
+      "esri/request",
+      "dojo/date/locale",
+      "dojo/domReady!"
+    ], function(
+      lang, esriRequest
+    ) { 
+      var url = restServiceUrl + "query?where=ID%3D"+urlParams.get("id")+"&outFields="+outFields+"&returnHiddenFields=false&returnGeometry=false&orderByFields=objectid&f=json";
+      esriRequest(url,{
+          responseType:'json',
+          callbackParamName:'callback',
+          timeout:8000
+        }).then(lang.hitch(this,function(resp){
+          if (resp.data.features.length > 0) {
+            FastFacilityForm(resp);
+          } else {
+            document.getElementById("error").innerHTML = "Error: No record found matching id " + urlParams.get("id") + "."
+          }
+        }),lang.hitch(this,function(error){
+          console.log(error.details);
+          if (error.code==498) { // token error
+            document.getElementById("error").innerHTML = "Security Error: Service requires login and none provided";
+          } else {
+            document.getElementById("error").innerHTML = "Failed error ("+error.details.code+"):"+error.details.messages+".";
+          }
+        }));
+        
+    }); // end dojo require
+    
+    
+
+
+  </script>
+
+</head>
+
+<body>
+
+    <h1 id="Title">Details</h1>
+    <div class="errormessage" id="error"></div>
+<!--Begin DIVs for field values-->
+<div><span class="fieldlabel" id="LPicturelabel">LPicture</span>&nbsp;:&nbsp;<img src="" class="fieldvalue" id="LPictureval" width="300"></div>
+<div><span class="fieldlabel" id="IDlabel">ID</span>&nbsp;:&nbsp;<span class="fieldvalue" id="IDval"></span></div>
+<div><span class="fieldlabel" id="ClientIDlabel">ClientID</span>&nbsp;:&nbsp;<span class="fieldvalue" id="ClientIDval"></span></div>
+<div><span class="fieldlabel" id="SorBlabel">SorB</span>&nbsp;:&nbsp;<span class="fieldvalue" id="SorBval"></span></div>
+<div><span class="fieldlabel" id="InputDatelabel">InputDate</span>&nbsp;:&nbsp;<span class="fieldvalue" id="InputDateval"></span></div>
+<div><span class="fieldlabel" id="Longitudelabel">Longitude</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Longitudeval"></span></div>
+<div><span class="fieldlabel" id="Latitudelabel">Latitude</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Latitudeval"></span></div>
+<div><span class="fieldlabel" id="PropertyNamelabel">PropertyName</span>&nbsp;:&nbsp;<span class="fieldvalue" id="PropertyNameval"></span></div>
+<div><span class="fieldlabel" id="Addresslabel">Address</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Addressval"></span></div>
+<div><span class="fieldlabel" id="Citylabel">City</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Cityval"></span></div>
+<div><span class="fieldlabel" id="Statelabel">State</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Stateval"></span></div>
+<div><span class="fieldlabel" id="Ziplabel">Zip</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Zipval"></span></div>
+<div><span class="fieldlabel" id="Countylabel">County</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Countyval"></span></div>
+<div><span class="fieldlabel" id="Typelabel">Type</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Typeval"></span></div>
+<div><span class="fieldlabel" id="Highwaylabel">Highway</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Highwayval"></span></div>
+<div><span class="fieldlabel" id="Raillabel">Rail</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Railval"></span></div>
+<div><span class="fieldlabel" id="Airportlabel">Airport</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Airportval"></span></div>
+<div><span class="fieldlabel" id="AirportDistlabel">AirportDist</span>&nbsp;:&nbsp;<span class="fieldvalue" id="AirportDistval"></span></div>
+<div><span class="fieldlabel" id="Electriclabel">Electric</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Electricval"></span></div>
+<div><span class="fieldlabel" id="Gaslabel">Gas</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Gasval"></span></div>
+<div><span class="fieldlabel" id="Waterlabel">Water</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Waterval"></span></div>
+<div><span class="fieldlabel" id="Sewerlabel">Sewer</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Sewerval"></span></div>
+<div><span class="fieldlabel" id="SaleorLeaselabel">SaleorLease</span>&nbsp;:&nbsp;<span class="fieldvalue" id="SaleorLeaseval"></span></div>
+<div><span class="fieldlabel" id="AdjacentLandlabel">AdjacentLand</span>&nbsp;:&nbsp;<span class="fieldvalue" id="AdjacentLandval"></span></div>
+<div><span class="fieldlabel" id="Acreslabel">Acres</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Acresval"></span></div>
+<div><span class="fieldlabel" id="SquareFeetlabel">SquareFeet</span>&nbsp;:&nbsp;<span class="fieldvalue" id="SquareFeetval"></span></div>
+<div><span class="fieldlabel" id="Floorslabel">Floors</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Floorsval"></span></div>
+<div><span class="fieldlabel" id="Dockslabel">Docks</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Docksval"></span></div>
+<div><span class="fieldlabel" id="Ceilinglabel">Ceiling</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Ceilingval"></span></div>
+<div><span class="fieldlabel" id="Parkinglabel">Parking</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Parkingval"></span></div>
+<div><span class="fieldlabel" id="Sprinklerlabel">Sprinkler</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Sprinklerval"></span></div>
+<div><span class="fieldlabel" id="SubDividelabel">SubDivide</span>&nbsp;:&nbsp;<span class="fieldvalue" id="SubDivideval"></span></div>
+<div><span class="fieldlabel" id="Namelabel">Name</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Nameval"></span></div>
+<div><span class="fieldlabel" id="Organizationlabel">Organization</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Organizationval"></span></div>
+<div><span class="fieldlabel" id="ID_1577632378116label">ID_1577632378116</span>&nbsp;:&nbsp;<span class="fieldvalue" id="ID_1577632378116val"></span></div>
+<div><span class="fieldlabel" id="Authorizedlabel">Authorized</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Authorizedval"></span></div>
+<div><span class="fieldlabel" id="Activelabel">Active</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Activeval"></span></div>
+<div><span class="fieldlabel" id="Organization_1577632378116label">Organization_1577632378116</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Organization_1577632378116val"></span></div>
+<div><span class="fieldlabel" id="Name_1577632378116label">Name_1577632378116</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Name_1577632378116val"></span></div>
+<div><span class="fieldlabel" id="Titlelabel">Title</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Titleval"></span></div>
+<div><span class="fieldlabel" id="Address_1577632378116label">Address_1577632378116</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Address_1577632378116val"></span></div>
+<div><span class="fieldlabel" id="City_1577632378116label">City_1577632378116</span>&nbsp;:&nbsp;<span class="fieldvalue" id="City_1577632378116val"></span></div>
+<div><span class="fieldlabel" id="State_1577632378116label">State_1577632378116</span>&nbsp;:&nbsp;<span class="fieldvalue" id="State_1577632378116val"></span></div>
+<div><span class="fieldlabel" id="Countrylabel">Country</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Countryval"></span></div>
+<div><span class="fieldlabel" id="Zip_1577632378116label">Zip_1577632378116</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Zip_1577632378116val"></span></div>
+<div><span class="fieldlabel" id="Regionlabel">Region</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Regionval"></span></div>
+<div><span class="fieldlabel" id="Phonelabel">Phone</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Phoneval"></span></div>
+<div><span class="fieldlabel" id="CellPhonelabel">CellPhone</span>&nbsp;:&nbsp;<span class="fieldvalue" id="CellPhoneval"></span></div>
+<div><span class="fieldlabel" id="Faxlabel">Fax</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Faxval"></span></div>
+<div><span class="fieldlabel" id="Emaillabel">Email</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Emailval"></span></div>
+<div><span class="fieldlabel" id="WebAddresslabel">WebAddress</span>&nbsp;:&nbsp;<span class="fieldvalue" id="WebAddressval"></span></div>
+<div><span class="fieldlabel" id="HeadShotlabel">HeadShot</span>&nbsp;:&nbsp;<span class="fieldvalue" id="HeadShotval"></span></div>
+<div><span class="fieldlabel" id="Statuslabel">Status</span>&nbsp;:&nbsp;<span class="fieldvalue" id="Statusval"></span></div>
+<div><span class="fieldlabel" id="JoinDatelabel">JoinDate</span>&nbsp;:&nbsp;<span class="fieldvalue" id="JoinDateval"></span></div>
+<div><span class="fieldlabel" id="ContractExpiryDatelabel">ContractExpiryDate</span>&nbsp;:&nbsp;<span class="fieldvalue" id="ContractExpiryDateval"></span></div>
+<div><span class="fieldlabel" id="OptInlabel">OptIn</span>&nbsp;:&nbsp;<span class="fieldvalue" id="OptInval"></span></div>
+<div><span class="fieldlabel" id="MasterAccountlabel">MasterAccount</span>&nbsp;:&nbsp;<span class="fieldvalue" id="MasterAccountval"></span></div>
+<!--div><span class="fieldlabel" id="ObjectIdlabel">ObjectId</span>&nbsp;:&nbsp;<span class="fieldvalue" id="ObjectIdval"></span></div-->
+<div><span class="fieldlabel" id="Logolabel">Logo</span><img src="" class="fieldvalue" id="Logoval" width="150"></div>
+
+<!--End DIVs for field values-->
+
+    
+</body>
+
+</html>
