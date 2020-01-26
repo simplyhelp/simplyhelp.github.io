@@ -3,7 +3,7 @@ var dojoConfig = {
 };
 "use strict";    
   
-var restServiceUrl = 'https://services9.arcgis.com/kO1m83jGh0X2wqlg/arcgis/rest/services/FastFacility_Properties_Clients/FeatureServer/0/';
+var restServiceUrl = 'https://services1.arcgis.com/UGWyiCIH2BDelPqy/arcgis/rest/services/FFPropertiesClients/FeatureServer/0/';
 var outFields = '*';
 var urlParams = new URLSearchParams(window.location.search); // gets all URL parameters
 
@@ -37,7 +37,7 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
         tableCode = "";
           tableCode += "<div><span class='fieldlabel' id='"+key+"label'>"+key+"</span>&nbsp;:&nbsp;"; // label
           //tableCode += "<span class='fieldvalue' id='"+key+"val'>:"+response.data.features[0].attributes[key]+"</span></div>"; // value
-          tableCode += "<span class='fieldlabel' id='"+key+"val'></span></div>"; // value
+          tableCode += "<span class='fieldvalue' id='"+key+"val'></span></div>"; // value
           document.getElementById("error").innerHTML += tableCode;
           console.log(tableCode);
         };
