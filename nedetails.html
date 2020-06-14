@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<!--requires parameter: ?id=57668-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+  <title>Details</title>
+  <script src="https://js.arcgis.com/4.14/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css" />
+
+
+  <link rel="stylesheet" href="nedetails.css">
+<script>
+  // function is called for each field (key) providing its retrieved value (fieldWorker)
+  function FillForm(key,fieldWorker) {
+    var htmlTarget = document.getElementById(key+"val");
+    if (htmlTarget) {
+      switch (key) {
+        case "WebAddress":
+          // Does this need http(s) prior?
+          if (!/^https?:\/\//i.test(fieldWorker)) {
+            fieldWorker = 'http://' + fieldWorker;
+          }
+          if (validURL(fieldWorker)) {
+            htmlTarget.innerHTML = "<a href='"+fieldWorker+"' target='_blank'>"+fieldWorker+"</a>";
+          } else {
+            htmlTarget.innerHTML = fieldWorker;
+          }
+          break;
+        case "InputDate":
+          htmlTarget.innerHTML = esriDate(fieldWorker);
+          break;
+        case "ObjectId": 
+          htmlTarget.innerHTML = "!!"+fieldWorker;
+          break;
+        case "LPicture":
+          htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
+          break;
+        case "Logo":
+          htmlTarget.src="http://www.fastfacility.com/uploads/"+fieldWorker;
+          break;
+        case "ID": // just display the ID
+          htmlTarget.innerHTML = fieldWorker;
+          break;
+        case "Zip": // just display a ZIP code
+          htmlTarget.innerHTML = fieldWorker;
+          break;
+        default:  // Adds commas to all number data, displays others
+          if (isNaN(fieldWorker)) {
+            htmlTarget.innerHTML = fieldWorker; 
+          } else {
+            htmlTarget.innerHTML = Number(fieldWorker).toLocaleString('en');
+          }
+        }
+      }
+  }
+  </script>
+</head>
+<body>
+
+  <div>
+    
+    <h1 id="Title">Details</h1>
+    <div class="errormessage" id="error"></div>
+    <div id="viewMapDiv"></div>
+    <!--Begin SPANS for field values-->
+
+<div><span class='fieldlabel' id='objectidlabel'>objectid</span>&nbsp;:&nbsp;<span class='fieldvalue' id='objectidval'></span></div>
+<div><span class='fieldlabel' id='globalidlabel'>globalid</span>&nbsp;:&nbsp;<span class='fieldvalue' id='globalidval'></span></div>
+<div><span class='fieldlabel' id='ffidlabel'>ffid</span>&nbsp;:&nbsp;<span class='fieldvalue' id='ffidval'></span></div>
+<div><span class='fieldlabel' id='sorblabel'>sorb</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sorbval'></span></div>
+<div><span class='fieldlabel' id='listingtitlelabel'>listingtitle</span>&nbsp;:&nbsp;<span class='fieldvalue' id='listingtitleval'></span></div>
+<div><span class='fieldlabel' id='streetlabel'>street</span>&nbsp;:&nbsp;<span class='fieldvalue' id='streetval'></span></div>
+<div><span class='fieldlabel' id='citylabel'>city</span>&nbsp;:&nbsp;<span class='fieldvalue' id='cityval'></span></div>
+<div><span class='fieldlabel' id='regionlabel'>region</span>&nbsp;:&nbsp;<span class='fieldvalue' id='regionval'></span></div>
+<div><span class='fieldlabel' id='zipcodelabel'>zipcode</span>&nbsp;:&nbsp;<span class='fieldvalue' id='zipcodeval'></span></div>
+<div><span class='fieldlabel' id='countrylabel'>country</span>&nbsp;:&nbsp;<span class='fieldvalue' id='countryval'></span></div>
+<div><span class='fieldlabel' id='propertytypelabel'>propertytype</span>&nbsp;:&nbsp;<span class='fieldvalue' id='propertytypeval'></span></div>
+<div><span class='fieldlabel' id='saleorleaselabel'>saleorlease</span>&nbsp;:&nbsp;<span class='fieldvalue' id='saleorleaseval'></span></div>
+<div><span class='fieldlabel' id='forsalelabel'>forsale</span>&nbsp;:&nbsp;<span class='fieldvalue' id='forsaleval'></span></div>
+<div><span class='fieldlabel' id='forleaselabel'>forlease</span>&nbsp;:&nbsp;<span class='fieldvalue' id='forleaseval'></span></div>
+<div><span class='fieldlabel' id='salepricelabel'>saleprice</span>&nbsp;:&nbsp;<span class='fieldvalue' id='salepriceval'></span></div>
+<div><span class='fieldlabel' id='leasepricelabel'>leaseprice</span>&nbsp;:&nbsp;<span class='fieldvalue' id='leasepriceval'></span></div>
+<div><span class='fieldlabel' id='leasetermslabel'>leaseterms</span>&nbsp;:&nbsp;<span class='fieldvalue' id='leasetermsval'></span></div>
+<div><span class='fieldlabel' id='totalsquarefeetlabel'>totalsquarefeet</span>&nbsp;:&nbsp;<span class='fieldvalue' id='totalsquarefeetval'></span></div>
+<div><span class='fieldlabel' id='minsquarefeetlabel'>minsquarefeet</span>&nbsp;:&nbsp;<span class='fieldvalue' id='minsquarefeetval'></span></div>
+<div><span class='fieldlabel' id='ceilingmaxlabel'>ceilingmax</span>&nbsp;:&nbsp;<span class='fieldvalue' id='ceilingmaxval'></span></div>
+<div><span class='fieldlabel' id='ceilingminlabel'>ceilingmin</span>&nbsp;:&nbsp;<span class='fieldvalue' id='ceilingminval'></span></div>
+<div><span class='fieldlabel' id='acreslabel'>acres</span>&nbsp;:&nbsp;<span class='fieldvalue' id='acresval'></span></div>
+<div><span class='fieldlabel' id='acresminlabel'>acresmin</span>&nbsp;:&nbsp;<span class='fieldvalue' id='acresminval'></span></div>
+<div><span class='fieldlabel' id='raillabel'>rail</span>&nbsp;:&nbsp;<span class='fieldvalue' id='railval'></span></div>
+<div><span class='fieldlabel' id='electriclabel'>electric</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricval'></span></div>
+<div><span class='fieldlabel' id='electricvoltslabel'>electricvolts</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricvoltsval'></span></div>
+<div><span class='fieldlabel' id='electricphaselabel'>electricphase</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricphaseval'></span></div>
+<div><span class='fieldlabel' id='electricampslabel'>electricamps</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricampsval'></span></div>
+<div><span class='fieldlabel' id='naturalgaslabel'>naturalgas</span>&nbsp;:&nbsp;<span class='fieldvalue' id='naturalgasval'></span></div>
+<div><span class='fieldlabel' id='waterlabel'>water</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterval'></span></div>
+<div><span class='fieldlabel' id='waterlinelabel'>waterline</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterlineval'></span></div>
+<div><span class='fieldlabel' id='waterrightslabel'>waterrights</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterrightsval'></span></div>
+<div><span class='fieldlabel' id='sewerlabel'>sewer</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sewerval'></span></div>
+<div><span class='fieldlabel' id='sewerlinelabel'>sewerline</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sewerlineval'></span></div>
+<div><span class='fieldlabel' id='dockslabel'>docks</span>&nbsp;:&nbsp;<span class='fieldvalue' id='docksval'></span></div>
+<div><span class='fieldlabel' id='drivedoorslabel'>drivedoors</span>&nbsp;:&nbsp;<span class='fieldvalue' id='drivedoorsval'></span></div>
+<div><span class='fieldlabel' id='zoninglabel'>zoning</span>&nbsp;:&nbsp;<span class='fieldvalue' id='zoningval'></span></div>
+<div><span class='fieldlabel' id='enterprisezonelabel'>enterprisezone</span>&nbsp;:&nbsp;<span class='fieldvalue' id='enterprisezoneval'></span></div>
+<div><span class='fieldlabel' id='noteslabel'>notes</span>&nbsp;:&nbsp;<span class='fieldvalue' id='notesval'></span></div>
+<div><span class='fieldlabel' id='countylabel'>county</span>&nbsp;:&nbsp;<span class='fieldvalue' id='countyval'></span></div>
+</div>
+<!--End SPANS for field values-->
+
+<script src="nedetails.js" async defer></script>
+    
+</body>
+
+</html>

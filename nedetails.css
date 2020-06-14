@@ -1,0 +1,19 @@
+body {
+  font-family: "Trebuchet MS";
+}
+.fieldlabel {
+  color:grey;
+}
+.fieldvalue {
+  color:darkgreen;
+}
+.errormessage {
+  color:darkred;
+  font-weight: bolder;
+}
+#viewMapDiv {
+  padding: 0;
+  margin: 0;
+  height: 250px;
+  width: auto;
+}
