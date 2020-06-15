@@ -43,7 +43,7 @@
         case "ID": // just display the ID
           htmlTarget.innerHTML = fieldWorker;
           break;
-        case "Zip": // just display a ZIP code
+        case "zipcode": // just display a ZIP code
           htmlTarget.innerHTML = fieldWorker;
           break;
         default:  // Adds commas to all number data, displays others
@@ -58,57 +58,57 @@
   </script>
 </head>
 <body>
-
-  <div>
+<page size="Letter">
+  <div class="pagemargins">
     
-    <h1 id="Title">Details</h1>
-    <div class="errormessage" id="error"></div>
+    <div class="box"><img src="http://www.fastfacility.com/uploads/2632Logo.jpg" alt="NVEnergy">&nbsp;<h1>Property Fact Sheet</h1></div>
+    <div class="titlearea"><h2 id="Title"><span class='fieldvalue' id='listingtitleval'></span></h2>
+      <div class="errormessage" id="error"></div>
     <div id="viewMapDiv"></div>
+  </div>
     <!--Begin SPANS for field values-->
+    <div><span class='fieldlabel' id='noteslabel'>Details</span>&nbsp;:&nbsp;<span class='fieldvalue' id='notesval'></span></div>
+    <div class="row">
+      <div class="column">
+        <div><span class='fieldlabel' id='streetlabel'>Street</span>&nbsp;:&nbsp;<span class='fieldvalue' id='streetval'></span></div>
+        <div><span class='fieldlabel' id='sorblabel'>Type</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sorbval'></span></div>
+        <div><span class='fieldlabel' id='citylabel'>City</span>&nbsp;:&nbsp;<span class='fieldvalue' id='cityval'></span></div>
+        <div><span class='fieldlabel' id='regionlabel'>State</span>&nbsp;:&nbsp;<span class='fieldvalue' id='regionval'></span></div>
+        <div><span class='fieldlabel' id='zipcodelabel'>Zipcode</span>&nbsp;:&nbsp;<span class='fieldvalue' id='zipcodeval'></span></div>
+        <div><span class='fieldlabel' id='propertytypelabel'>Property Type</span>&nbsp;:&nbsp;<span class='fieldvalue' id='propertytypeval'></span></div>
+        <div><span class='fieldlabel' id='forsalelabel'>For Sale</span>&nbsp;:&nbsp;<span class='fieldvalue' id='forsaleval'></span></div>
+        <div><span class='fieldlabel' id='forleaselabel'>For Lease</span>&nbsp;:&nbsp;<span class='fieldvalue' id='forleaseval'></span></div>
+        <div><span class='fieldlabel' id='salepricelabel'>Sale Price</span>&nbsp;:&nbsp;<span class='fieldvalue' id='salepriceval'></span></div>
+        <div><span class='fieldlabel' id='leasepricelabel'>Lease Price</span>&nbsp;:&nbsp;<span class='fieldvalue' id='leasepriceval'></span></div>
+        <div><span class='fieldlabel' id='leasetermslabel'>Lease Terms</span>&nbsp;:&nbsp;<span class='fieldvalue' id='leasetermsval'></span></div>
+        <div><span class='fieldlabel' id='totalsquarefeetlabel'>Total SqFt</span>&nbsp;:&nbsp;<span class='fieldvalue' id='totalsquarefeetval'></span></div>
+        <div><span class='fieldlabel' id='minsquarefeetlabel'>Min SqFt</span>&nbsp;:&nbsp;<span class='fieldvalue' id='minsquarefeetval'></span></div>
+        <div><span class='fieldlabel' id='ceilingmaxlabel'>Ceiling Height</span>&nbsp;:&nbsp;<span class='fieldvalue' id='ceilingmaxval'></span></div>
+        <div><span class='fieldlabel' id='ceilingminlabel'>Ceiling Min</span>&nbsp;:&nbsp;<span class='fieldvalue' id='ceilingminval'></span></div>
+        <div><span class='fieldlabel' id='acreslabel'>Acres</span>&nbsp;:&nbsp;<span class='fieldvalue' id='acresval'></span></div>
+        <div><span class='fieldlabel' id='acresminlabel'>Min Acres</span>&nbsp;:&nbsp;<span class='fieldvalue' id='acresminval'></span></div>
+      </div><div class="column">
 
-<div><span class='fieldlabel' id='objectidlabel'>objectid</span>&nbsp;:&nbsp;<span class='fieldvalue' id='objectidval'></span></div>
-<div><span class='fieldlabel' id='globalidlabel'>globalid</span>&nbsp;:&nbsp;<span class='fieldvalue' id='globalidval'></span></div>
-<div><span class='fieldlabel' id='ffidlabel'>ffid</span>&nbsp;:&nbsp;<span class='fieldvalue' id='ffidval'></span></div>
-<div><span class='fieldlabel' id='sorblabel'>sorb</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sorbval'></span></div>
-<div><span class='fieldlabel' id='listingtitlelabel'>listingtitle</span>&nbsp;:&nbsp;<span class='fieldvalue' id='listingtitleval'></span></div>
-<div><span class='fieldlabel' id='streetlabel'>street</span>&nbsp;:&nbsp;<span class='fieldvalue' id='streetval'></span></div>
-<div><span class='fieldlabel' id='citylabel'>city</span>&nbsp;:&nbsp;<span class='fieldvalue' id='cityval'></span></div>
-<div><span class='fieldlabel' id='regionlabel'>region</span>&nbsp;:&nbsp;<span class='fieldvalue' id='regionval'></span></div>
-<div><span class='fieldlabel' id='zipcodelabel'>zipcode</span>&nbsp;:&nbsp;<span class='fieldvalue' id='zipcodeval'></span></div>
-<div><span class='fieldlabel' id='countrylabel'>country</span>&nbsp;:&nbsp;<span class='fieldvalue' id='countryval'></span></div>
-<div><span class='fieldlabel' id='propertytypelabel'>propertytype</span>&nbsp;:&nbsp;<span class='fieldvalue' id='propertytypeval'></span></div>
-<div><span class='fieldlabel' id='saleorleaselabel'>saleorlease</span>&nbsp;:&nbsp;<span class='fieldvalue' id='saleorleaseval'></span></div>
-<div><span class='fieldlabel' id='forsalelabel'>forsale</span>&nbsp;:&nbsp;<span class='fieldvalue' id='forsaleval'></span></div>
-<div><span class='fieldlabel' id='forleaselabel'>forlease</span>&nbsp;:&nbsp;<span class='fieldvalue' id='forleaseval'></span></div>
-<div><span class='fieldlabel' id='salepricelabel'>saleprice</span>&nbsp;:&nbsp;<span class='fieldvalue' id='salepriceval'></span></div>
-<div><span class='fieldlabel' id='leasepricelabel'>leaseprice</span>&nbsp;:&nbsp;<span class='fieldvalue' id='leasepriceval'></span></div>
-<div><span class='fieldlabel' id='leasetermslabel'>leaseterms</span>&nbsp;:&nbsp;<span class='fieldvalue' id='leasetermsval'></span></div>
-<div><span class='fieldlabel' id='totalsquarefeetlabel'>totalsquarefeet</span>&nbsp;:&nbsp;<span class='fieldvalue' id='totalsquarefeetval'></span></div>
-<div><span class='fieldlabel' id='minsquarefeetlabel'>minsquarefeet</span>&nbsp;:&nbsp;<span class='fieldvalue' id='minsquarefeetval'></span></div>
-<div><span class='fieldlabel' id='ceilingmaxlabel'>ceilingmax</span>&nbsp;:&nbsp;<span class='fieldvalue' id='ceilingmaxval'></span></div>
-<div><span class='fieldlabel' id='ceilingminlabel'>ceilingmin</span>&nbsp;:&nbsp;<span class='fieldvalue' id='ceilingminval'></span></div>
-<div><span class='fieldlabel' id='acreslabel'>acres</span>&nbsp;:&nbsp;<span class='fieldvalue' id='acresval'></span></div>
-<div><span class='fieldlabel' id='acresminlabel'>acresmin</span>&nbsp;:&nbsp;<span class='fieldvalue' id='acresminval'></span></div>
-<div><span class='fieldlabel' id='raillabel'>rail</span>&nbsp;:&nbsp;<span class='fieldvalue' id='railval'></span></div>
-<div><span class='fieldlabel' id='electriclabel'>electric</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricval'></span></div>
-<div><span class='fieldlabel' id='electricvoltslabel'>electricvolts</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricvoltsval'></span></div>
-<div><span class='fieldlabel' id='electricphaselabel'>electricphase</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricphaseval'></span></div>
-<div><span class='fieldlabel' id='electricampslabel'>electricamps</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricampsval'></span></div>
-<div><span class='fieldlabel' id='naturalgaslabel'>naturalgas</span>&nbsp;:&nbsp;<span class='fieldvalue' id='naturalgasval'></span></div>
-<div><span class='fieldlabel' id='waterlabel'>water</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterval'></span></div>
-<div><span class='fieldlabel' id='waterlinelabel'>waterline</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterlineval'></span></div>
-<div><span class='fieldlabel' id='waterrightslabel'>waterrights</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterrightsval'></span></div>
-<div><span class='fieldlabel' id='sewerlabel'>sewer</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sewerval'></span></div>
-<div><span class='fieldlabel' id='sewerlinelabel'>sewerline</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sewerlineval'></span></div>
-<div><span class='fieldlabel' id='dockslabel'>docks</span>&nbsp;:&nbsp;<span class='fieldvalue' id='docksval'></span></div>
-<div><span class='fieldlabel' id='drivedoorslabel'>drivedoors</span>&nbsp;:&nbsp;<span class='fieldvalue' id='drivedoorsval'></span></div>
-<div><span class='fieldlabel' id='zoninglabel'>zoning</span>&nbsp;:&nbsp;<span class='fieldvalue' id='zoningval'></span></div>
-<div><span class='fieldlabel' id='enterprisezonelabel'>enterprisezone</span>&nbsp;:&nbsp;<span class='fieldvalue' id='enterprisezoneval'></span></div>
-<div><span class='fieldlabel' id='noteslabel'>notes</span>&nbsp;:&nbsp;<span class='fieldvalue' id='notesval'></span></div>
-<div><span class='fieldlabel' id='countylabel'>county</span>&nbsp;:&nbsp;<span class='fieldvalue' id='countyval'></span></div>
-</div>
-<!--End SPANS for field values-->
 
+        <div><span class='fieldlabel' id='raillabel'>Rail</span>&nbsp;:&nbsp;<span class='fieldvalue' id='railval'></span></div>
+        <div><span class='fieldlabel' id='electriclabel'>Electric Avail</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricval'></span></div>
+        <div><span class='fieldlabel' id='electricvoltslabel'>Volts</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricvoltsval'></span></div>
+        <div><span class='fieldlabel' id='electricphaselabel'>Phase</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricphaseval'></span></div>
+        <div><span class='fieldlabel' id='electricampslabel'>Amps</span>&nbsp;:&nbsp;<span class='fieldvalue' id='electricampsval'></span></div>
+        <div><span class='fieldlabel' id='naturalgaslabel'>Natural Gas</span>&nbsp;:&nbsp;<span class='fieldvalue' id='naturalgasval'></span></div>
+        <div><span class='fieldlabel' id='waterlabel'>Water</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterval'></span></div>
+        <div><span class='fieldlabel' id='waterlinelabel'>Water Line</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterlineval'></span></div>
+        <div><span class='fieldlabel' id='waterrightslabel'>Water Rights</span>&nbsp;:&nbsp;<span class='fieldvalue' id='waterrightsval'></span></div>
+        <div><span class='fieldlabel' id='sewerlabel'>Sewer</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sewerval'></span></div>
+        <div><span class='fieldlabel' id='sewerlinelabel'>Sewer Line</span>&nbsp;:&nbsp;<span class='fieldvalue' id='sewerlineval'></span></div>
+        <div><span class='fieldlabel' id='dockslabel'>Docks</span>&nbsp;:&nbsp;<span class='fieldvalue' id='docksval'></span></div>
+        <div><span class='fieldlabel' id='drivedoorslabel'>Drive in doors</span>&nbsp;:&nbsp;<span class='fieldvalue' id='drivedoorsval'></span></div>
+        <div><span class='fieldlabel' id='zoninglabel'>Zoning</span>&nbsp;:&nbsp;<span class='fieldvalue' id='zoningval'></span></div>
+        <div><span class='fieldlabel' id='enterprisezonelabel'>Is Enterprise Zone</span>&nbsp;:&nbsp;<span class='fieldvalue' id='enterprisezoneval'></span></div>
+        <div><span class='fieldlabel' id='countylabel'>county</span>&nbsp;:&nbsp;<span class='fieldvalue' id='countyval'></span></div>
+      </div></div>
+      <!--End SPANS for field values-->
+</page>
 <script src="nedetails.js" async defer></script>
     
 </body>
