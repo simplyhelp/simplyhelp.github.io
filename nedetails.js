@@ -3,7 +3,7 @@ var dojoConfig = {
 };
 "use strict";    
   
-var restServiceUrl = 'https://services9.arcgis.com/kO1m83jGh0X2wqlg/ArcGIS/rest/services/service_9fcfe2f417b54da4a089217a02166c82/FeatureServer/0/';
+var restServiceUrl = 'https://services1.arcgis.com/UGWyiCIH2BDelPqy/ArcGIS/rest/services/NVE_View_Datastore/FeatureServer/0/'; //resturl param
 var outFields = '*';
 var urlParams = new URLSearchParams(window.location.search); // gets all URL parameters
 
@@ -145,6 +145,13 @@ var urlParams = new URLSearchParams(window.location.search); // gets all URL par
     ], function(
       lang, esriRequest
     ) { 
+      if (urlParams.get('resturl')!=null) { // URL Parameter resturl overrides internal URL
+        console.log('RESTURL supplied, checking URL')
+        if (validURL(urlParams.get('resturl'))) {
+          restServiceUrl = urlParams.get('resturl');
+          console.log('RESTURL supplied and used')
+        }
+      }
       var url = restServiceUrl + "query?where=globalid%3D'"+urlParams.get("id")+"'&outFields="+outFields+"&returnHiddenFields=false&returnGeometry=true&orderByFields=objectid&f=json";
       console.log(url);
       esriRequest(url,{
